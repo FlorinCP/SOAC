@@ -1,4 +1,4 @@
-import style from "./CustomDropdown.module.css";
+import "./CustomDropdown.css";
 import { useRef, useState } from "react";
 
 type Option = {
@@ -27,17 +27,17 @@ function CustomDropdown({ options, placeholder, value, sendSelectedOption }: Cus
   };
 
   return (
-      <div className={style.select}>
-        <div className={style.trigger} onClick={toggleDropdown}>
+      <div className="select">
+        <div className="trigger" onClick={toggleDropdown}>
           {value ? options.find((option) => option.value === value)?.label : (selectedOption ? selectedOption.label : placeholder)} &nbsp;
           <span className="material-symbols-outlined">expand_more</span>
         </div>
         {isOpen && (
-            <div className={style.options} ref={dropdownRef}>
+            <div className="options" ref={dropdownRef}>
               {options.map((option) => (
                   <div
                       key={option.value}
-                      className={style.option}
+                      className="option"
                       onClick={() => handleOptionClick(option)}
                   >
                     {option.label}
