@@ -38,7 +38,7 @@
 
 .sectionAreaB {
   border: 1px solid #888;
-  padding: 20px;
+  padding: 10px;
   position: relative;
   border-radius: 10px;
   min-height: 250px;
@@ -98,6 +98,10 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+* :focus{
+  outline: none;
+}
+
 @media screen and (max-width: 768px) {
   .selectionDiv {
     flex-direction: column;
@@ -112,4 +116,9 @@
   .selectionBench {
     margin: 10px;
   }
+
+  .commandDiv{
+    flex-direction:column;
+  }
+
 }

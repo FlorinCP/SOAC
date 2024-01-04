@@ -1,6 +1,8 @@
 import "./App.css";
 import CustomDropdown from "./components/CustomDropdown/CustomDropdown.tsx";
 import ActionButton from "./components/ActionButton/ActionButton.tsx";
+import React, { useEffect, useState } from "react";
+import { fetchParsedFile } from "./functions/parseFile.ts";
 
 function App() {
   const FR = [
@@ -104,38 +106,106 @@ function App() {
 
   const benchmarks = [
     {
-      value: "FBUBBLE",
-      label: "FBUBBLE",
+      value: "Fbubble.trc",
+      label: "Fbubble",
     },
     {
-      value: "FMATRIX",
-      label: "FMATRIX",
+      value: "Fmatrix.trc",
+      label: "Fmatrix",
     },
     {
-      value: "PERM",
-      label: "PERM",
+      value: "Fperm.trc",
+      label: "Fperm",
     },
     {
-      value: "FPUZZLE",
-      label: "FPUZZLE",
+      value: "Fpuzzle.trc",
+      label: "Fpuzzle",
     },
     {
-      value: "FQUEENS",
-      label: "FQUEENS",
+      value: "Fqueens.trc",
+      label: "Fqueens",
     },
     {
-      value: "FSORT",
-      label: "FSORT",
+      value: "Fsort.trc",
+      label: "Fsort",
     },
     {
-      value: "FTOWER",
-      label: "FTOWER",
+      value: "Ftower.trc",
+      label: "Ftower",
     },
     {
-      value: "FTREE",
-      label: "FTREE",
+      value: "Ftree.trc",
+      label: "Ftree",
+    },
+    {
+      value: "All",
+      label: "All",
     },
   ];
+
+  const [selectedBenchmarks, setSelectedBenchmarks] = useState<string[]>([]);
+
+  const handleBenchmarkSelection = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (event.target.checked) {
+      setSelectedBenchmarks([...selectedBenchmarks, event.target.value]);
+    } else {
+      setSelectedBenchmarks(
+        selectedBenchmarks.filter(
+          (benchmark) => benchmark !== event.target.value,
+        ),
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (selectedBenchmarks.includes("All")) {
+      setSelectedBenchmarks(
+        benchmarks
+          .filter((benchmark) => benchmark.value !== "All")
+          .map((benchmark) => benchmark.value),
+      );
+    }
+  }, [selectedBenchmarks]);
+
+  interface ArchParams {
+    FR: number;
+    IBS: number;
+    IRMax: number;
+    Latency: number;
+  }
+
+  interface CacheParams {
+    BS_IC: number;
+    Size_IC: number;
+    BS_DC: number;
+    Size_DC: number;
+  }
+
+  const [archParams, setArchParams] = useState<ArchParams>({
+    FR: 0,
+    IBS: 0,
+    IRMax: 0,
+    Latency: 0,
+  });
+
+  const [cacheParams, setCacheParams] = useState<CacheParams>({
+    BS_IC: 0,
+    Size_IC: 0,
+    BS_DC: 0,
+    Size_DC: 0,
+  });
+
+  const simulation = async () => {
+    try {
+      const {B, S, L} = await fetchParsedFile(selectedBenchmarks);
+      console.log(B, S, L);
+    } catch (error) {
+      console.error("Error in simulation:", error);
+    }
+  };
+
 
   return (
     <div>
@@ -153,7 +223,15 @@ function App() {
               <CustomDropdown
                 options={FR}
                 placeholder={"FR"}
-                sendSelectedOption={(data) => console.log(data)}
+                value={ archParams.FR !== 0 ? archParams.FR.toString() : FR[0].value }
+                sendSelectedOption={(data) =>
+                  setArchParams((prevState) => {
+                    return {
+                      ...prevState,
+                      FR: parseInt(data.value),
+                    };
+                  })
+                }
               />
             </div>
             <div className="selectionItem">
@@ -161,7 +239,15 @@ function App() {
               <CustomDropdown
                 options={IBS}
                 placeholder={"IBS"}
-                sendSelectedOption={(data) => console.log(data)}
+                value={ archParams.IBS !== 0 ? archParams.IBS.toString() : IBS[0].value }
+                sendSelectedOption={(data) =>
+                    setArchParams((prevState) => {
+                      return {
+                        ...prevState,
+                        IBS: parseInt(data.value),
+                      };
+                    })
+                }
               />
             </div>
             <div className="selectionItem">
@@ -169,7 +255,15 @@ function App() {
               <CustomDropdown
                 options={IRMax}
                 placeholder={"IRMax"}
-                sendSelectedOption={(data) => console.log(data)}
+                value={ archParams.IRMax !== 0 ? archParams.IRMax.toString() : IRMax[0].value }
+                sendSelectedOption={(data) =>
+                    setArchParams((prevState) => {
+                      return {
+                        ...prevState,
+                        IRMax: parseInt(data.value),
+                      };
+                    })
+                }
               />
             </div>
             <div className="selectionItem">
@@ -177,7 +271,15 @@ function App() {
               <CustomDropdown
                 options={Latency}
                 placeholder={"Latency"}
-                sendSelectedOption={(data) => console.log(data)}
+                value={ archParams.Latency !== 0 ? archParams.Latency.toString() : Latency[0].value }
+                sendSelectedOption={(data) =>
+                    setArchParams((prevState) => {
+                      return {
+                        ...prevState,
+                        Latency: parseInt(data.value),
+                      };
+                    })
+                }
               />
             </div>
           </div>
@@ -227,6 +329,7 @@ function App() {
                     type="checkbox"
                     id={`checkbox-${index}`}
                     value={benchmark.value}
+                    onChange={handleBenchmarkSelection}
                   />
                   {benchmark.label}
                 </label>
@@ -249,9 +352,7 @@ function App() {
 
           <ActionButton
             text={"Simuleaza"}
-            onClick={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            onClick={simulation}
             active={true}
             backgroundColor={"#1c79b8"}
             color={"white"}

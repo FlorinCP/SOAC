@@ -1,12 +1,20 @@
 import express, { Request, Response } from 'express';
 
 const app = express();
+const cors = require('cors');
 import fs from "fs";
 import path from "path";
 import {Instruction} from "./types/Instruction";
 import {parseInstructions} from "./functions/parseInstructions";
 import {countInstructions} from "./functions/countInstructionTypes";
+import {totalInstructions} from "./types/totalInstructions";
 const PORT: string | number = process.env.PORT || 5000;
+
+const corsOptions = {
+    origin: 'http://localhost:5173',
+};
+
+app.use(cors(corsOptions));
 
 
 app.get('/parse-file', (req:Request, res:Response) => {
@@ -27,7 +35,16 @@ app.get('/parse-file', (req:Request, res:Response) => {
 
         const instructionsList:Instruction[] = parseInstructions(fileContent);
         const instructionsCount:Record<string, number> = countInstructions(instructionsList);
-        res.json(instructionsCount);
+        const totalInstructionsCount:number = totalInstructions[filename]
+        const oneCycle:number = totalInstructionsCount - instructionsCount.B - instructionsCount.S - instructionsCount.L
+
+        const response = {
+            ...instructionsCount,
+            Total : totalInstructionsCount,
+            OneCycle : oneCycle
+        }
+
+        res.json(response);
     });
 });
 
