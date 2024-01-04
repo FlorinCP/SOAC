@@ -233,6 +233,9 @@ function App() {
             ))}
           </div>
         </div>
+        <div className="commandDiv">
+
+        </div>
       </div>
     </div>
   );

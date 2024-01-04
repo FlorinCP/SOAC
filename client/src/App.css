@@ -81,4 +81,21 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+@media screen and (max-width: 768px){
 
+  .selectionDiv{
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .sectionAreaB{
+    width: 250px;
+    margin: 0;
+  }
+
+  .selectionBench{
+    margin: 10px;
+  }
+
+
+}
