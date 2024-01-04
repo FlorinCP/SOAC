@@ -101,6 +101,7 @@ export class Simulation {
         const DCMissRate = (this.DCMiss * 100) / BSL;
 
         return  new SimulationResponse(
+            this.filename,
             oneCycle,
             nrOfBranches,
             nrOfLoads,

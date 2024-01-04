@@ -9,6 +9,7 @@ import { CacheParams } from "./types/cacheParams.ts";
 import { simulationParams } from "./types/simulationParams.ts";
 import { simulate } from "./functions/simulate.ts";
 import { SimulationResponse } from "./types/simulationResponse.ts";
+import ResultTable from "./components/ResultTable/ResultTable.tsx";
 
 function App() {
   const [simulationParams, setSimulationParams] = useState<simulationParams>({
@@ -111,15 +112,7 @@ function App() {
         </div>
 
         {simulationResults[0] && (
-          <div>
-            <div className="nameColl">
-              {Object.keys(simulationResults[0]).map((key, index) => (
-                <div className="nameCell" key={index}>
-                  <p>{key}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+         <ResultTable simulationResults={simulationResults}/>
         )}
       </div>
     </div>

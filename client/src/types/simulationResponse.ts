@@ -1,4 +1,5 @@
 export class SimulationResponse {
+    filename: string;
     OneCycle: number;
     nrOfBranches: number;
     nrOfLoads: number;
@@ -14,6 +15,7 @@ export class SimulationResponse {
     ICAccess: number;
 
     constructor(
+        filename: string,
         OneCycle: number = 0,
         nrOfBranches: number = 0,
         nrOfLoads: number = 0,
@@ -28,6 +30,7 @@ export class SimulationResponse {
         DCAccess: number = 0,
         ICAccess: number = 0
     ) {
+        this.filename = filename;
         this.OneCycle = OneCycle;
         this.nrOfBranches = nrOfBranches;
         this.nrOfLoads = nrOfLoads;

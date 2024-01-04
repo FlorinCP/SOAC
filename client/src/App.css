@@ -83,6 +83,7 @@
   flex-direction: row;
   gap: 20px;
   padding-top: 30px;
+  margin-bottom: 30px;
 }
 
 .logo {
@@ -98,8 +99,77 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-* :focus{
+* :focus {
   outline: none;
+}
+
+.resultTable {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #888;
+  min-height: 250px;
+  min-width: 250px;
+  width: fit-content;
+}
+
+.nameColl {
+  border-right: 1px solid #888;
+}
+
+.resultColl {
+  border-right: 1px solid #888;
+}
+
+.resultColl:last-child {
+  border-right: none;
+}
+
+.nameCell:last-child {
+  border-bottom: none;
+}
+
+.nameCell {
+  width: 100px;
+  font-weight: 500;
+  padding: 0px 15px;
+  border-bottom: 1px solid #888;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #f9f9f9;
+}
+
+.nameCell:first-child{
+  background-color: white;
+}
+
+.nameCell > p {
+  margin: 0;
+}
+
+.resultCell > p {
+  margin: 0;
+}
+
+.resultCell {
+  width: 100px;
+  text-align: center;
+  font-weight: 500;
+  padding: 0px 15px;
+  border-bottom: 1px solid #888;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultCell:first-child{
+  background-color: #f9f9f9;
+}
+
+.resultCell:last-child {
+  border-bottom: none;
 }
 
 @media screen and (max-width: 768px) {
@@ -117,8 +187,7 @@
     margin: 10px;
   }
 
-  .commandDiv{
-    flex-direction:column;
+  .commandDiv {
+    flex-direction: column;
   }
-
 }
