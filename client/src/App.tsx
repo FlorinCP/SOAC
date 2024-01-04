@@ -1,17 +1,16 @@
 import "./App.css";
 import ActionButton from "./components/ActionButton/ActionButton.tsx";
-import  { useState } from "react";
+import { useState } from "react";
 import Benchmarks from "./components/Benchmarks/Benchmarks.tsx";
 import ArchParamsBox from "./components/ArchParamsBox/ArchParamsBox.tsx";
 import { ArchParams } from "./types/archParams.ts";
 import CacheParamsBox from "./components/CacheParamsBox/CacheParamsBox.tsx";
 import { CacheParams } from "./types/cacheParams.ts";
-import {simulationParams} from "./types/simulationParams.ts";
-import {simulate} from "./functions/simulate.ts";
+import { simulationParams } from "./types/simulationParams.ts";
+import { simulate } from "./functions/simulate.ts";
 
 function App() {
-
-  const [simulationParams , setSimulationParams] = useState<simulationParams>({
+  const [simulationParams, setSimulationParams] = useState<simulationParams>({
     benchmarks: [],
     FR: 0,
     IBS: 0,
@@ -30,7 +29,7 @@ function App() {
         benchmarks: data,
       };
     });
-  }
+  };
 
   const handleArchParams = (data: ArchParams) => {
     setSimulationParams((prevState) => {
@@ -42,7 +41,7 @@ function App() {
         Latency: data.Latency,
       };
     });
-  }
+  };
 
   const handleCacheParams = (data: CacheParams) => {
     setSimulationParams((prevState) => {
@@ -54,12 +53,15 @@ function App() {
         Size_DC: data.Size_DC,
       };
     });
-  }
+  };
+
+  const [simulationResults, setSimulationResults] = useState({});
 
   const simulation = async () => {
     try {
-        const response = await simulate(simulationParams);
-        console.log(response);
+      const response = await simulate(simulationParams);
+      console.log(response);
+      setSimulationResults(response);
     } catch (error) {
       console.error("Error in simulation:", error);
     }
@@ -106,6 +108,18 @@ function App() {
             <span className="material-symbols-outlined">check_circle</span>
           </ActionButton>
         </div>
+
+        {simulationResults && (
+          <div>
+            <div className="nameColl">
+              {Object.keys(simulationResults).map((key, index) => (
+                <div className="nameCell" key={index}>
+                  <p>{key}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

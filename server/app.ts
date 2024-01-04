@@ -1,121 +1,79 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
 
 const app = express();
 import cors from "cors";
 import fs from "fs";
 import path from "path";
-import {Instruction} from "./types/Instruction";
-import {parseInstructions} from "./functions/parseInstructions";
-import {countInstructions} from "./functions/countInstructionTypes";
-import {totalInstructions} from "./types/totalInstructions";
-import bodyParser from 'body-parser';
-import {simulationParams} from "./types/simulationParams";
+import { Instruction } from "./types/Instruction";
+import { parseInstructions } from "./functions/parseInstructions";
+import { countInstructions } from "./functions/countInstructionTypes";
+import { totalInstructions } from "./types/totalInstructions";
+import bodyParser from "body-parser";
+import { simulationParams } from "./types/simulationParams";
 import readFile from "./functions/readFile";
+import {SimulationResponse} from "./types/simulationResponse";
+import {Simulation} from "./types/Simulation";
 const PORT: string | number = process.env.PORT || 5000;
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+  origin: "http://localhost:5173",
 };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-app.post('/simulate', async (req: Request, res: Response) => {
+app.post("/simulate", async (req: Request, res: Response) => {
+  const params: simulationParams = req.body;
+  const filename = params.benchmarks[0];
 
-    const params: simulationParams = req.body;
-    const filename = params.benchmarks[0]
+  const instructionsList: Instruction[] = await readFile(filename);
 
-    const instructionsList: Instruction[] = await readFile(filename);
+  const simulation = new Simulation(params, instructionsList);
 
-    const DataCache :number[] = new Array(params.Size_DC).fill("");
-    const InstrCache :number[] = new Array(params.Size_IC).fill("");
-    let ICAccess :number =0
-    let ICMiss :number =0
+  const response: SimulationResponse = await simulation.runSimulation();
 
-    function DataCacheAdd (instruction : Instruction) : void {
+  res.json(response);
+});
 
+app.get("/parse-file", (req: Request, res: Response) => {
+  const { filename } = req.query;
+
+  if (typeof filename !== "string") {
+    return res.status(400).send("Filename must be a string");
+  }
+
+  const filePath = path.join(__dirname, "TRACES", filename);
+
+  fs.readFile(filePath, "utf8", (err, fileContent) => {
+    if (err) {
+      console.error(`Error reading the file: ${filename}`, err);
+      return res.status(500).send("Error reading the file");
     }
 
-    function InstrCacheAdd (instruction : Instruction) : void {
-        if (checkIfInstructionCacheHit(instruction)) {
-            ICAccess++;
-        } else if (InstrCache.length < params.Size_IC/params.BS_IC) {
-            InstrCache.push(instruction.icAddress);
-            ICMiss++;
-        } else {
-            InstrCache.shift();
-            InstrCache.push(instruction.icAddress);
-            ICMiss++;
-        }
-    }
-
-    function checkIfInstructionCacheHit (instruction : Instruction) : boolean {
-       return InstrCache.includes(instruction.icAddress)
-    }
-
-    let nrOfBranches = 0;
-
-    instructionsList.forEach(instruction => {
-        switch (instruction.type) {
-            case "B":
-                nrOfBranches++;
-                InstrCacheAdd(instruction);
-                break;
-        }
-    })
-
-
-    const instructionsCount: Record<string, number> = countInstructions(instructionsList);
-    const totalInstructionsCount: number = totalInstructions[filename]
-    const oneCycle: number = totalInstructionsCount - instructionsCount.B - instructionsCount.S - instructionsCount.L
+    const instructionsList: Instruction[] = parseInstructions(fileContent);
+    const instructionsCount: Record<string, number> =
+      countInstructions(instructionsList);
+    const totalInstructionsCount: number = totalInstructions[filename];
+    const oneCycle: number =
+      totalInstructionsCount -
+      instructionsCount.B -
+      instructionsCount.S -
+      instructionsCount.L;
 
     const response = {
-        ...instructionsCount,
-        Total: totalInstructionsCount,
-        OneCycle: oneCycle
-    }
+      ...instructionsCount,
+      Total: totalInstructionsCount,
+      OneCycle: oneCycle,
+    };
 
     res.json(response);
+  });
 });
 
-
-app.get('/parse-file', (req:Request, res:Response) => {
-
-    const { filename } = req.query;
-
-    if (typeof filename !== 'string') {
-        return res.status(400).send('Filename must be a string');
-    }
-
-    const filePath = path.join(__dirname, 'TRACES', filename);
-
-    fs.readFile(filePath, 'utf8', (err, fileContent) => {
-        if (err) {
-            console.error(`Error reading the file: ${filename}`, err);
-            return res.status(500).send('Error reading the file');
-        }
-
-        const instructionsList:Instruction[] = parseInstructions(fileContent);
-        const instructionsCount:Record<string, number> = countInstructions(instructionsList);
-        const totalInstructionsCount:number = totalInstructions[filename]
-        const oneCycle:number = totalInstructionsCount - instructionsCount.B - instructionsCount.S - instructionsCount.L
-
-        const response = {
-            ...instructionsCount,
-            Total : totalInstructionsCount,
-            OneCycle : oneCycle
-        }
-
-        res.json(response);
-    });
-});
-
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello World!');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
-
-
