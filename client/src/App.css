@@ -5,7 +5,7 @@
   text-align: center;
 }
 
-.selectionItem{
+.selectionItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,30 +13,31 @@
 }
 
 .sectionItem > * {
-  flex : 1;
+  flex: 1;
 }
 
-.selectionDiv{
+.selectionDiv {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   gap: 60px;
-  padding: 30px;
+  padding: 5px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #888;
 }
 
-.sectionArea{
-  border : 1px solid #888;
+.sectionArea {
+  border: 1px solid #888;
   padding: 20px;
   position: relative;
   border-radius: 10px;
   min-height: 250px;
   min-width: 250px;
-
 }
 
-.sectionAreaB{
-  border : 1px solid #888;
+.sectionAreaB {
+  border: 1px solid #888;
   padding: 20px;
   position: relative;
   border-radius: 10px;
@@ -44,11 +45,11 @@
   min-width: 150px;
 }
 
-.selectionBench{
+.selectionBench {
   width: 80%;
   display: flex;
   align-items: flex-start;
-  justify-content:flex-start;
+  justify-content: flex-start;
   user-select: none;
   margin: 5px;
 }
@@ -57,7 +58,7 @@
   cursor: pointer;
 }
 
-.sectionAreaTitle{
+.sectionAreaTitle {
   white-space: nowrap;
   position: absolute;
   left: 50%;
@@ -65,7 +66,23 @@
   top: -30px;
   padding: 0 10px;
   background-color: white;
+}
 
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+.commandDiv {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+  padding-top: 30px;
 }
 
 .logo {
@@ -81,21 +98,18 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@media screen and (max-width: 768px){
-
-  .selectionDiv{
+@media screen and (max-width: 768px) {
+  .selectionDiv {
     flex-direction: column;
     gap: 40px;
   }
 
-  .sectionAreaB{
+  .sectionAreaB {
     width: 250px;
     margin: 0;
   }
 
-  .selectionBench{
+  .selectionBench {
     margin: 10px;
   }
-
-
 }

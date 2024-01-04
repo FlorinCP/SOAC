@@ -1,5 +1,6 @@
 import "./App.css";
 import CustomDropdown from "./components/CustomDropdown/CustomDropdown.tsx";
+import ActionButton from "./components/ActionButton/ActionButton.tsx";
 
 function App() {
   const FR = [
@@ -234,7 +235,29 @@ function App() {
           </div>
         </div>
         <div className="commandDiv">
+          <ActionButton
+            text={"Reset"}
+            onClick={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            active={true}
+            color={"white"}
+            backgroundColor={"rgb(238, 49, 88)"}
+          >
+            <span className="material-symbols-outlined">restart_alt</span>
+          </ActionButton>
 
+          <ActionButton
+            text={"Simuleaza"}
+            onClick={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            active={true}
+            backgroundColor={"#1c79b8"}
+            color={"white"}
+          >
+            <span className="material-symbols-outlined">check_circle</span>
+          </ActionButton>
         </div>
       </div>
     </div>
