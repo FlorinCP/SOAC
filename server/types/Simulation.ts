@@ -2,6 +2,7 @@ import {simulationParams} from "./simulationParams";
 import {Instruction} from "./Instruction";
 import {SimulationResponse} from "./simulationResponse";
 import {totalInstructions} from "./totalInstructions";
+import readFile from "../functions/readFile";
 
 export class Simulation {
     private DataCache: number[];
@@ -11,15 +12,24 @@ export class Simulation {
     private DCAccess: number = 0;
     private DCMiss: number = 0;
     private params: simulationParams;
-    private instructionsList: Instruction[];
+    private instructionsList!: Instruction[];
     private filename: string;
 
-    constructor(params: simulationParams, instructionsList: Instruction[]) {
+    private constructor(params: simulationParams,filename:string) {
         this.params = params;
         this.filename = params.benchmarks[0];
-        this.instructionsList = instructionsList;
         this.DataCache = new Array(params.Size_DC).fill("");
         this.InstrCache = new Array(params.Size_IC).fill("");
+    }
+
+    static async createInstance(params: simulationParams,filename:string): Promise<Simulation> {
+        const simulation = new Simulation(params,filename);
+        simulation.instructionsList = await simulation.loadInstructions(simulation.filename); // Load the instructions list
+        return simulation;
+    }
+
+    private async loadInstructions(filename: string): Promise<Instruction[]> {
+        return readFile(filename);
     }
 
     private DataCacheAdd(instruction: Instruction): void {

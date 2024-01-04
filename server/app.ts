@@ -10,9 +10,9 @@ import { countInstructions } from "./functions/countInstructionTypes";
 import { totalInstructions } from "./types/totalInstructions";
 import bodyParser from "body-parser";
 import { simulationParams } from "./types/simulationParams";
-import readFile from "./functions/readFile";
 import {SimulationResponse} from "./types/simulationResponse";
 import {Simulation} from "./types/Simulation";
+import {getSimulationResponse} from "./functions/getSimulationResponse";
 const PORT: string | number = process.env.PORT || 5000;
 
 const corsOptions = {
@@ -26,11 +26,7 @@ app.post("/simulate", async (req: Request, res: Response) => {
   const params: simulationParams = req.body;
   const filename = params.benchmarks[0];
 
-  const instructionsList: Instruction[] = await readFile(filename);
-
-  const simulation = new Simulation(params, instructionsList);
-
-  const response: SimulationResponse = await simulation.runSimulation();
+  const response = await getSimulationResponse(params, filename)
 
   res.json(response);
 });
