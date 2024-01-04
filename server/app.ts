@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 
 const app = express();
-const cors = require('cors');
+import cors from "cors";
 import fs from "fs";
 import path from "path";
 import {Instruction} from "./types/Instruction";
@@ -10,6 +10,7 @@ import {countInstructions} from "./functions/countInstructionTypes";
 import {totalInstructions} from "./types/totalInstructions";
 import bodyParser from 'body-parser';
 import {simulationParams} from "./types/simulationParams";
+import readFile from "./functions/readFile";
 const PORT: string | number = process.env.PORT || 5000;
 
 const corsOptions = {
@@ -19,11 +20,62 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-app.post('/simulate', (req: Request, res: Response) => {
+app.post('/simulate', async (req: Request, res: Response) => {
 
     const params: simulationParams = req.body;
+    const filename = params.benchmarks[0]
 
-    res.json({ receivedParams: params });
+    const instructionsList: Instruction[] = await readFile(filename);
+
+    const DataCache :number[] = new Array(params.Size_DC).fill("");
+    const InstrCache :number[] = new Array(params.Size_IC).fill("");
+    let ICAccess :number =0
+    let ICMiss :number =0
+
+    function DataCacheAdd (instruction : Instruction) : void {
+
+    }
+
+    function InstrCacheAdd (instruction : Instruction) : void {
+        if (checkIfInstructionCacheHit(instruction)) {
+            ICAccess++;
+        } else if (InstrCache.length < params.Size_IC/params.BS_IC) {
+            InstrCache.push(instruction.icAddress);
+            ICMiss++;
+        } else {
+            InstrCache.shift();
+            InstrCache.push(instruction.icAddress);
+            ICMiss++;
+        }
+    }
+
+    function checkIfInstructionCacheHit (instruction : Instruction) : boolean {
+       return InstrCache.includes(instruction.icAddress)
+    }
+
+    let nrOfBranches = 0;
+
+    instructionsList.forEach(instruction => {
+        switch (instruction.type) {
+            case "B":
+                nrOfBranches++;
+                InstrCacheAdd(instruction);
+                break;
+        }
+    })
+
+
+    const instructionsCount: Record<string, number> = countInstructions(instructionsList);
+    const totalInstructionsCount: number = totalInstructions[filename]
+    const oneCycle: number = totalInstructionsCount - instructionsCount.B - instructionsCount.S - instructionsCount.L
+
+    const response = {
+        ...instructionsCount,
+        Total: totalInstructionsCount,
+        OneCycle: oneCycle
+    }
+
+    res.json(response);
 });
 
 

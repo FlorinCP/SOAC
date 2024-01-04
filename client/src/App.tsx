@@ -1,13 +1,13 @@
 import "./App.css";
 import ActionButton from "./components/ActionButton/ActionButton.tsx";
-import React, { useEffect, useState } from "react";
-import { fetchParsedFile } from "./functions/parseFile.ts";
+import  { useState } from "react";
 import Benchmarks from "./components/Benchmarks/Benchmarks.tsx";
 import ArchParamsBox from "./components/ArchParamsBox/ArchParamsBox.tsx";
 import { ArchParams } from "./types/archParams.ts";
 import CacheParamsBox from "./components/CacheParamsBox/CacheParamsBox.tsx";
 import { CacheParams } from "./types/cacheParams.ts";
 import {simulationParams} from "./types/simulationParams.ts";
+import {simulate} from "./functions/simulate.ts";
 
 function App() {
 
@@ -58,8 +58,8 @@ function App() {
 
   const simulation = async () => {
     try {
-      const { B, S, L } = await fetchParsedFile(selectedBenchmarks);
-      console.log(B, S, L);
+        const response = await simulate(simulationParams);
+        console.log(response);
     } catch (error) {
       console.error("Error in simulation:", error);
     }
