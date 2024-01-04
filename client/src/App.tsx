@@ -8,6 +8,7 @@ import CacheParamsBox from "./components/CacheParamsBox/CacheParamsBox.tsx";
 import { CacheParams } from "./types/cacheParams.ts";
 import { simulationParams } from "./types/simulationParams.ts";
 import { simulate } from "./functions/simulate.ts";
+import { SimulationResponse } from "./types/simulationResponse.ts";
 
 function App() {
   const [simulationParams, setSimulationParams] = useState<simulationParams>({
@@ -55,7 +56,7 @@ function App() {
     });
   };
 
-  const [simulationResults, setSimulationResults] = useState({});
+  const [simulationResults, setSimulationResults] = useState<SimulationResponse[]>([]);
 
   const simulation = async () => {
     try {
@@ -109,10 +110,10 @@ function App() {
           </ActionButton>
         </div>
 
-        {simulationResults && (
+        {simulationResults[0] && (
           <div>
             <div className="nameColl">
-              {Object.keys(simulationResults).map((key, index) => (
+              {Object.keys(simulationResults[0]).map((key, index) => (
                 <div className="nameCell" key={index}>
                   <p>{key}</p>
                 </div>

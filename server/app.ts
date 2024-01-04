@@ -10,9 +10,8 @@ import { countInstructions } from "./functions/countInstructionTypes";
 import { totalInstructions } from "./types/totalInstructions";
 import bodyParser from "body-parser";
 import { simulationParams } from "./types/simulationParams";
-import {SimulationResponse} from "./types/simulationResponse";
-import {Simulation} from "./types/Simulation";
-import {getSimulationResponse} from "./functions/getSimulationResponse";
+import { getSimulationResponse } from "./functions/getSimulationResponse";
+import { SimulationResponse } from "./types/simulationResponse";
 const PORT: string | number = process.env.PORT || 5000;
 
 const corsOptions = {
@@ -24,11 +23,15 @@ app.use(bodyParser.json());
 
 app.post("/simulate", async (req: Request, res: Response) => {
   const params: simulationParams = req.body;
-  const filename = params.benchmarks[0];
 
-  const response = await getSimulationResponse(params, filename)
+  const responseArray: SimulationResponse[] = [];
 
-  res.json(response);
+  for (const filename of params.benchmarks) {
+    const response = await getSimulationResponse(params, filename);
+    responseArray.push(response);
+  }
+
+  res.json(responseArray);
 });
 
 app.get("/parse-file", (req: Request, res: Response) => {

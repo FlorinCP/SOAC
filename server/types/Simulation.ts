@@ -17,7 +17,7 @@ export class Simulation {
 
     private constructor(params: simulationParams,filename:string) {
         this.params = params;
-        this.filename = params.benchmarks[0];
+        this.filename = filename
         this.DataCache = new Array(params.Size_DC).fill("");
         this.InstrCache = new Array(params.Size_IC).fill("");
     }
