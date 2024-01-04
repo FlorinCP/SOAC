@@ -8,6 +8,8 @@ import {Instruction} from "./types/Instruction";
 import {parseInstructions} from "./functions/parseInstructions";
 import {countInstructions} from "./functions/countInstructionTypes";
 import {totalInstructions} from "./types/totalInstructions";
+import bodyParser from 'body-parser';
+import {simulationParams} from "./types/simulationParams";
 const PORT: string | number = process.env.PORT || 5000;
 
 const corsOptions = {
@@ -15,6 +17,14 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(bodyParser.json());
+
+app.post('/simulate', (req: Request, res: Response) => {
+
+    const params: simulationParams = req.body;
+
+    res.json({ receivedParams: params });
+});
 
 
 app.get('/parse-file', (req:Request, res:Response) => {
