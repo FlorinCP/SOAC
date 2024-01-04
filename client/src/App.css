@@ -5,6 +5,69 @@
   text-align: center;
 }
 
+.selectionItem{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sectionItem > * {
+  flex : 1;
+}
+
+.selectionDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 60px;
+  padding: 30px;
+}
+
+.sectionArea{
+  border : 1px solid #888;
+  padding: 20px;
+  position: relative;
+  border-radius: 10px;
+  min-height: 250px;
+  min-width: 250px;
+
+}
+
+.sectionAreaB{
+  border : 1px solid #888;
+  padding: 20px;
+  position: relative;
+  border-radius: 10px;
+  min-height: 250px;
+  min-width: 150px;
+}
+
+.selectionBench{
+  width: 80%;
+  display: flex;
+  align-items: flex-start;
+  justify-content:flex-start;
+  user-select: none;
+  margin: 5px;
+}
+
+.selectionBench > * {
+  cursor: pointer;
+}
+
+.sectionAreaTitle{
+  white-space: nowrap;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -30px;
+  padding: 0 10px;
+  background-color: white;
+
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
