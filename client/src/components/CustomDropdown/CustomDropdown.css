@@ -1,0 +1,46 @@
+.select{
+    position: relative;
+    border: 1px solid rgb(213, 213, 213); /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    background-color: white;
+    color: #444; /* Text color */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Cursor style */
+    outline: none; /* Removes the default focus outline */
+    min-width: 120px;
+    user-select: none;
+    height: 45px;
+    box-sizing: border-box;
+}
+
+.trigger{
+    padding: 10px;
+    padding-left: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.options{
+    position: absolute;
+    left: 0;
+    right: 0;
+    /*bottom: 100%;*/
+    border: 1px solid #ccc;
+    background: white;
+    z-index: 10;
+    min-height: fit-content;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background-color: #f0f0f0;
+}
