@@ -13,6 +13,7 @@ import { simulationParams } from "./types/simulationParams";
 import { getSimulationResponse } from "./functions/getSimulationResponse";
 import { SimulationResponse } from "./types/simulationResponse";
 const PORT: string | number = process.env.PORT || 5000;
+import https from "https";
 
 const corsOptions = {
   origin: "*",
@@ -73,6 +74,14 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.listen(PORT, () => {
+const server = https.createServer(
+  {
+    key: fs.readFileSync("./cert/key.pem"),
+    cert: fs.readFileSync("./cert/cert.pem"),
+  },
+  app,
+);
+
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
