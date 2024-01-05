@@ -15,6 +15,7 @@ import { SimulationResponse } from "./types/simulationResponse";
 const PORT: string | number = process.env.PORT || 5000;
 import https from "https";
 
+
 const corsOptions = {
   origin: "*",
 };
@@ -76,8 +77,8 @@ app.get("/", (req: Request, res: Response) => {
 
 const server = https.createServer(
   {
-    key: fs.readFileSync("./cert/key.pem"),
-    cert: fs.readFileSync("./cert/cert.pem"),
+    key: fs.readFileSync('/etc/letsencrypt/live/sibiuparking.online/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/sibiuparking.online/fullchain.pem')
   },
   app,
 );

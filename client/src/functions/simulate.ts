@@ -1,7 +1,7 @@
 import { simulationParams } from "../types/simulationParams";
 export async function simulate(simulationParams:simulationParams){
 
-    const url = 'http://localhost:5000/simulate'
+    const url = 'https://167.172.172.101:5000/simulate'
     const options = {
         method: 'POST',
         headers: {
