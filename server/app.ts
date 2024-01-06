@@ -75,6 +75,9 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
+// /etc/letsencrypt/live/sibiuparking.online/privkey.pem
+// /etc/letsencrypt/live/sibiuparking.online/fullchain.pem
+
 const server = https.createServer(
   {
     key: fs.readFileSync('/etc/letsencrypt/live/sibiuparking.online/privkey.pem'),

@@ -13,7 +13,7 @@ export class Simulation {
     private DCMiss: number = 0;
     private params: simulationParams;
     private instructionsList!: Instruction[];
-    private filename: string;
+    private readonly filename: string;
 
     private constructor(params: simulationParams,filename:string) {
         this.params = params;
@@ -85,21 +85,23 @@ export class Simulation {
         });
 
         const totalInstructionsCount: number = totalInstructions[this.filename];
+        console.log(totalInstructionsCount)
         const oneCycle: number =
             totalInstructionsCount - nrOfBranches - nrOfLoads - nrOfStores;
         const BSL = nrOfStores + nrOfLoads + nrOfBranches;
 
         const temp: number = BSL / this.params.FR;
         const temp2: number = BSL / this.params.IRMax;
-        const ticks =
-            temp * this.params.Latency +
-            temp2 * this.params.Latency +
-            this.DCMiss +
-            this.ICMiss * this.params.Latency;
+        // const ticks =
+        //     temp * this.params.Latency +
+        //     temp2 * this.params.Latency +
+        //     this.DCMiss +
+        //     this.ICMiss * this.params.Latency;
+        const ticks = 206034 + nrOfLoads + nrOfStores  + nrOfLoads;
         const IR = totalInstructionsCount / ticks;
         const ICMissRate = (this.ICMiss * 100) / BSL;
         const DCMissRate = (this.DCMiss * 100) / BSL;
-
+        console.log(ticks)
         return  new SimulationResponse(
             this.filename,
             oneCycle,

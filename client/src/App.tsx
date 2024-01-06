@@ -10,6 +10,7 @@ import { simulationParams } from "./types/simulationParams.ts";
 import { simulate } from "./functions/simulate.ts";
 import { SimulationResponse } from "./types/simulationResponse.ts";
 import ResultTable from "./components/ResultTable/ResultTable.tsx";
+import ChartView from "./components/ChartView/ChartView.tsx";
 
 function App() {
   const [simulationParams, setSimulationParams] = useState<simulationParams>({
@@ -57,7 +58,9 @@ function App() {
     });
   };
 
-  const [simulationResults, setSimulationResults] = useState<SimulationResponse[]>([]);
+  const [simulationResults, setSimulationResults] = useState<
+    SimulationResponse[]
+  >([]);
 
   const simulation = async () => {
     try {
@@ -68,6 +71,7 @@ function App() {
       console.error("Error in simulation:", error);
     }
   };
+
 
   return (
     <div>
@@ -112,8 +116,13 @@ function App() {
         </div>
 
         {simulationResults[0] && (
-         <ResultTable simulationResults={simulationResults}/>
+          <ResultTable simulationResults={simulationResults} />
         )}
+
+        {simulationResults[0] &&
+          simulationResults.map((simulationP, index) => (
+            <ChartView simulationResults={simulationP} FR={simulationParams.FR} IBS={simulationParams.IBS} key={index} />
+          ))}
       </div>
     </div>
   );
